@@ -1,0 +1,10 @@
+http:
+  port: 8081
+
+log:
+  file: "./last.log"
+  levels:
+    errors: true
+    warnings: true
+    info: true
+    debug: true
