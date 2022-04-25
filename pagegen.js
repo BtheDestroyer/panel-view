@@ -2,6 +2,7 @@ module.exports = function() {
     let page = {
         content: [],
         finalize: function() { return this.content.join(""); },
+        toString: function() { return this.finalize(``); },
         addGenerator: function(htmlTag, defaultAttributeMap = {}, hasContent = true)
         {
             if (hasContent)
@@ -49,20 +50,33 @@ module.exports = function() {
             return this;
         },
     }
+    .addGenerator("html")
     .addGenerator("head")
     .addGenerator("body")
+    .addGenerator("header")
+    .addGenerator("footer")
+
+    .addGenerator("style")
+    .addGenerator("script")
+    .addGenerator("noscript")
     
     .addGenerator("a", {href: undefined})
     .addGenerator("p")
     .addGenerator("b")
     .addGenerator("i")
     .addGenerator("u")
+    .addGenerator("s")
+    .addGenerator("sub")
+    .addGenerator("sup")
+    .addGenerator("pre")
+    .addGenerator("code")
     
     .addGenerator("h1")
     .addGenerator("h2")
     .addGenerator("h3")
     .addGenerator("h4")
     .addGenerator("h5")
+    .addGenerator("h6")
     
     .addGenerator("ol")
     .addGenerator("ul")
@@ -78,8 +92,13 @@ module.exports = function() {
     
     .addGenerator("img", { src: undefined }, false)
     .addGenerator("br", {}, false)
+    .addGenerator("hr", {}, false)
+    .addGenerator("link", { rel: "stylesheet", type: "text/css", href: undefined })
     
-    .addGenerator("button", { type: "button" }, false)
+    .addGenerator("form", { action: undefined, method: "post" }, false)
+    .addGenerator("input", { type: "text", name: undefined })
+    .addGenerator("textarea", { rows: 5, cols: 40, name: undefined })
+    .addGenerator("button", { type: "button", value: undefined }, false)
     
     .addGenerator("colgroup", { span: undefined })
     .addGenerator("col", { width: 100});

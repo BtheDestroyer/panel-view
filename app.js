@@ -61,28 +61,33 @@ LOG.info(`Starting tiny-webhook on port ${PORT}`);
 HTTP.createServer((req, res) => {
     try
     {
-        LOG.info();
         if (req.method === "GET")
         {
-            LOG.debug(`HTTP GET request recieved.`)
+            LOG.debug(`HTTP GET request recieved: ${req.url}`)
             if (req.url === "/")
             {
                 res.writeHead(200, {'Content-Type':'text/html'});
-                res.write(PG()
-                    .h1(`Panel View`)
-                    .p("TBA")
-                    .finalize()
+                res.write(PG().html(
+                        PG()
+                        .h1(`Panel View`)
+                        .p("TBA")
+                    ).finalize()
                     );
                 res.end();
                 return;
             }
             if (req.url.endsWith("/"))
             {
-                while (req.url.endsWith("/"))
+                var url = req.url;
+                while (url.endsWith("/"))
                 {
-                    req.url = req.url.substring(0, req.url.length - 1);
+                    url = url.substring(0, url.length - 1);
                 }
-                res.writeHead(302, {'Location':req.url});
+                if (url === "")
+                {
+                    url = "/";
+                }
+                res.writeHead(302, {'Location': url});
                 res.end();
                 return;
             }
@@ -97,28 +102,31 @@ HTTP.createServer((req, res) => {
                 messages.slice(START).reverse().forEach(
                     msg => list.li(msg)
                     );
-                res.write(PG()
-                    .h1('panel-view log')
-                    .ul(list.finalize())
-                    .finalize()
+                res.write(PG().html(
+                        PG()
+                        .h1('panel-view log')
+                        .ul(list.finalize())
+                    ).finalize()
                     );
                 res.end();
                 return;
             }
             res.writeHead(404, {'Content-Type':'text/html'});
-            res.write(PG()
-                .h1(`Page not found: ${req.url}`)
-                .a("Return home", { href: "/" })
-                .finalize()
+            res.write(PG().html(
+                    PG()
+                    .h1(`Page not found: ${req.url}`)
+                    .a("Return home", { href: "/" })
+                ).finalize()
                 );
             res.end();
             return;
         }
         LOG.warning(`Unsupported HTTP method (${req.method}) request recieved`)
         res.writeHead(405, {"Content-Type":"text/html"});
-        res.write(PG()
-            .h1(`Invalid HTTP method: ${req.method}`)
-            .finalize()
+        res.write(PG().html(
+                PG()
+                .h1(`Invalid HTTP method: ${req.method}`)
+            ).finalize()
             );
         res.end();
         return;
