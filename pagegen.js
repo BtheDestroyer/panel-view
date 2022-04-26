@@ -93,7 +93,7 @@ module.exports = function() {
     .addGenerator("img", { src: undefined }, false)
     .addGenerator("br", {}, false)
     .addGenerator("hr", {}, false)
-    .addGenerator("link", { rel: "stylesheet", type: "text/css", href: undefined })
+    .addGenerator("link", { rel: "stylesheet", type: "text/css", href: undefined }, false)
     
     .addGenerator("form", { action: undefined, method: "post" }, false)
     .addGenerator("input", { type: "text", name: undefined })

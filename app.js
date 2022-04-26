@@ -1,7 +1,10 @@
 const HTTP = require("http");
-const PG = require("./pagegen.js")
-const CFG = require("./cfg.js").open()
-const LOG = require("./log.js")
+const FS = require("fs");
+const PATH = require("path");
+const MIME = require("mime");
+const PG = require("./pagegen.js");
+const CFG = require("./cfg.js").open();
+const LOG = require("./log.js");
 
 function fail(reason)
 {
@@ -57,64 +60,66 @@ if (typeof(CFG["http"]["port"]) !== 'number')
 }
 
 const PORT = CFG["http"]["port"];
-LOG.info(`Starting tiny-webhook on port ${PORT}`);
+LOG.info(`Starting panel-view on port ${PORT}`);
 HTTP.createServer((req, res) => {
     try
     {
+        let url = new URL(req.url, `http://${req.headers.host}/`);
         if (req.method === "GET")
         {
             LOG.debug(`HTTP GET request recieved: ${req.url}`)
-            if (req.url === "/")
+            if (url.pathname === "/")
             {
-                res.writeHead(200, {'Content-Type':'text/html'});
-                res.write(PG().html(
-                        PG()
-                        .h1(`Panel View`)
-                        .p("TBA")
-                    ).finalize()
-                    );
-                res.end();
+                LOG.debug("Serving index...");
+                const indexPath = "./pages/index.js";
+                delete require.cache[require.resolve(indexPath)];
+                require(indexPath)(req, res);
                 return;
             }
-            if (req.url.endsWith("/"))
+            if (url.pathname.endsWith("/"))
             {
-                var url = req.url;
-                while (url.endsWith("/"))
+                var dest = url.pathname;
+                while (dest.endsWith("/"))
                 {
-                    url = url.substring(0, url.length - 1);
+                    dest = dest.substring(0, dest.length - 1);
                 }
-                if (url === "")
+                if (dest === "")
                 {
-                    url = "/";
+                    dest = "/";
                 }
-                res.writeHead(302, {'Location': url});
+                LOG.debug(`Redirecting to: ${dest}`);
+                res.writeHead(302, {'Location': dest});
                 res.end();
                 return;
             }
-            else if (req.url === "/log")
+            // Attempt to serve dynamic page
             {
-                res.writeHead(200, {'Content-Type':'text/html'});
-                const LOG_LENGTH = 20;
-                const START = messages.length > 20
-                            ? messages.length - LOG_LENGTH
-                            : 0;
-                var list = PG();
-                messages.slice(START).reverse().forEach(
-                    msg => list.li(msg)
-                    );
-                res.write(PG().html(
-                        PG()
-                        .h1('panel-view log')
-                        .ul(list.finalize())
-                    ).finalize()
-                    );
-                res.end();
-                return;
+                const absPath = PATH.resolve(PATH.join(".", "pages", `${url.pathname}.js`));
+                if (FS.existsSync(absPath) && absPath.startsWith(__dirname))
+                {
+                    LOG.debug("Serving dynamic page...");
+                    delete require.cache[require.resolve(absPath)];
+                    require(absPath)(req, res);
+                    return;
+                }
             }
+            // Attempt to serve static file
+            {
+                const absPath = PATH.resolve(PATH.join(".", "static", url.pathname));
+                if (FS.existsSync(absPath) && absPath.startsWith(__dirname))
+                {
+                    LOG.debug("Serving static page...");
+                    const stats = FS.statSync(absPath);
+                    res.writeHead(200, {'Content-Type': MIME.getType(absPath), 'Content-Length': stats.size});
+                    FS.createReadStream(absPath).pipe(res);
+                    return;
+                }
+            }
+            LOG.debug("Page not found...");
             res.writeHead(404, {'Content-Type':'text/html'});
             res.write(PG().html(
                     PG()
-                    .h1(`Page not found: ${req.url}`)
+                    .h1(`Page not found: ${url.pathname}`)
                     .a("Return home", { href: "/" })
                 ).finalize()
                 );

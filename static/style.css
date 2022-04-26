@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+    background-color: #404040;
+    font-family: "Monaco", monospace;
+}
+h1 {
+    padding: 0.5em;
+    margin-bottom: 0.75em;
+    color: #888;
+    background-color: #181820;
+    position: sticky;
+    top: 0;
+}
+h1::after {
+    content: "";
+    position: absolute;
+    top: 2.15em;
+    left: 0;
+    height: 0.75em;
+    width: 100%;
+    background: linear-gradient(#000F, #0000);
+}
+.panels {
+    margin: 0.5em 1em 0.5em 0.5em;
+}
+.panel {
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    border: 4px solid #181820;
+    border-radius: 1em;
+    width: 100%;
+    color: #888;
+    background-color: #282830;
+    break-inside: avoid;
+}
+@media screen and (min-width:65em) {
+    .panels {
+        column-count: 2;
+    }
+}
+@media screen and (min-width:130em) {
+    .panels {
+        column-count: 3;
+    }
+}
+.panel>* {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.panel>h2 {
+    margin: 0;
+    padding: 0.5em;
+    border-radius: 0.25em 0.25em 0 0;
+    background-color: #181820;
+}
+a {
+    color: currentcolor;
+}
+footer {
+    text-align: center;
+    margin-top: 1em;
+    padding: 0.5em;
+    color: #888;
+    background-color: #181820;
+}
+footer>* {
+    padding: 0;
+    margin: 0;
+}
