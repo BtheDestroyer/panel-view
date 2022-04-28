@@ -47,7 +47,8 @@ h1::after {
     color: #888;
     background-color: #282830;
     break-inside: avoid;
-    box-shadow: 0.5em 0.5em 0.5em #0008
+    box-shadow: 0.5em 0.5em 0.5em #0008;
+    display: inline-block;
 }
 .panel>* {
     margin-left: 1em;
