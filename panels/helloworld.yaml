@@ -1,0 +1,22 @@
+title: Hello Panels
+contents:
+  - text: Welcome to panel-view!
+    italic: true
+  - bullet:
+    - text: View the source code
+      link: https://github.com/bthedestroyer/panel-view
+    - text: Check out the configuration documentation (TBA)
+    - bullet:
+      - text: Nested bullets!
+      - text: Because we can
+        italic: true
+  - text: "Text examples:"
+  - text: Italic
+    italic: true
+  - text: Bold
+    bold: true
+  - text: Underline
+    underline: true
+  - text: Strikethrough
+    strikethrough: true
+  - image: https://via.placeholder.com/150S

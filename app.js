@@ -61,7 +61,7 @@ if (typeof(CFG["http"]["port"]) !== 'number')
 
 const PORT = CFG["http"]["port"];
 LOG.info(`Starting panel-view on port ${PORT}`);
-HTTP.createServer((req, res) => {
+HTTP.createServer(async (req, res) => {
     try
     {
         let url = new URL(req.url, `http://${req.headers.host}/`);
@@ -73,7 +73,7 @@ HTTP.createServer((req, res) => {
                 LOG.debug("Serving index...");
                 const indexPath = "./pages/index.js";
                 delete require.cache[require.resolve(indexPath)];
-                require(indexPath)(req, res);
+                await require(indexPath)(req, res);
                 return;
             }
             if (url.pathname.endsWith("/"))
@@ -99,7 +99,7 @@ HTTP.createServer((req, res) => {
                 {
                     LOG.debug("Serving dynamic page...");
                     delete require.cache[require.resolve(absPath)];
-                    require(absPath)(req, res);
+                    await require(absPath)(req, res);
                     return;
                 }
             }

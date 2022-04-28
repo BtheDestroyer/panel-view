@@ -2,6 +2,8 @@ body {
     margin: 0;
     background-color: #404040;
     font-family: "Monaco", monospace;
+    position: relative;
+    min-height: 100vh;
 }
 h1 {
     padding: 0.5em;
@@ -21,7 +23,8 @@ h1::after {
     background: linear-gradient(#000F, #0000);
 }
 .panels {
-    margin: 0.5em 1em 0.5em 0.5em;
+    margin: 0.5em 1em 0em 0.5em;
+    padding-bottom: 3.5em;
 }
 .panel {
     padding-bottom: 0.5em;
@@ -59,9 +62,13 @@ a {
 footer {
     text-align: center;
     margin-top: 1em;
-    padding: 0.5em;
+    padding-top: 1em;
     color: #888;
     background-color: #181820;
+    position: absolute;
+    bottom: 0;
+    height: 2em;
+    width: 100%;
 }
 footer>* {
     padding: 0;

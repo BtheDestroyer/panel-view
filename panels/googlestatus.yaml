@@ -1,6 +1,0 @@
-title: Google Status
-refresh-time: 300
-contents:
-  - text: Ping time to google.com ime in milliseconds
-  - success: ping google.com -n 1
-  - command: ping google.com -n 1 | grep Average | awk '{print $3}' | cut -c 3- --complement

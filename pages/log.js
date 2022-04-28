@@ -1,6 +1,6 @@
 const PG = require("../pagegen.js");
 
-module.exports = function(req, res)
+module.exports = async function(req, res)
 {
     res.writeHead(200, {'Content-Type':'text/html'});
     const LOG_LENGTH = 20;

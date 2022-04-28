@@ -3,6 +3,15 @@ module.exports = function() {
         content: [],
         finalize: function() { return this.content.join(""); },
         toString: function() { return this.finalize(``); },
+        append: function(element)
+        {
+            element = `${element}`;
+            if (element.length > 0)
+            {
+                this.content.push(element);
+            }
+            return this;
+        },
         addGenerator: function(htmlTag, defaultAttributeMap = {}, hasContent = true)
         {
             if (hasContent)
@@ -12,7 +21,7 @@ module.exports = function() {
                     attributeMap = {...defaultAttributeMap, ...attributeMap};
                     if (Object.keys(attributeMap).length == 0)
                     {
-                        this.content.push(`<${htmlTag}>${content}</${htmlTag}>`);
+                        this.append(`<${htmlTag}>${content}</${htmlTag}>`);
                     }
                     else
                     {
@@ -21,7 +30,7 @@ module.exports = function() {
                         {
                             attributeList.push(`${key}="${attributeMap[key]}"`);
                         }
-                        this.content.push(`<${htmlTag} ${attributeList.join(" ")}>${content}</${htmlTag}>`)
+                        this.append(`<${htmlTag} ${attributeList.join(" ")}>${content}</${htmlTag}>`)
                     }
                     return this;
                 }
@@ -33,7 +42,7 @@ module.exports = function() {
                     attributeMap = {...defaultAttributeMap, ...attributeMap};
                     if (Object.keys(attributeMap).length == 0)
                     {
-                        this.content.push(`<${htmlTag} />`);
+                        this.append(`<${htmlTag} />`);
                     }
                     else
                     {
@@ -42,7 +51,7 @@ module.exports = function() {
                         {
                             attributeList.push(`${key}="${attributeMap[key]}"`);
                         }
-                        this.content.push(`<${htmlTag} ${attributeList.join(" ")} />`)
+                        this.append(`<${htmlTag} ${attributeList.join(" ")} />`)
                     }
                     return this;
                 }
