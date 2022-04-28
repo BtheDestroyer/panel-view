@@ -1,6 +1,7 @@
 const PG = require("../pagegen.js");
 const { URL } = require("url");
 const LOG = require("../log.js");
+const CFG = require("../cfg.js").open();
 
 module.exports = async function (req, res)
 {
@@ -19,20 +20,17 @@ module.exports = async function (req, res)
     var panelsContent = PG();
     for (var panel of PANELS)
     {
-        const contents = await panel.draw();
-        panelsContent.div(
-            contents,
-            { class: "panel", panel: panel.panel }
-        );
+        panelsContent.append(await panel.draw());
     }
     res.end(
-        PG().html(
+        PG().DOCTYPE()
+        .html(
             PG().head(
                 PG().link({ href: "/style.css" })
                 .script("", { src: "/jquery-3.6.0.min.js" })
             )
             .body(
-                PG().h1("Panel View")
+                PG().h1(CFG.page.title || "Panel View")
                 .div(
                     panelsContent,
                     { class: "panels" }
@@ -43,5 +41,5 @@ module.exports = async function (req, res)
                 .script("", { src: "/panel_manager.js" })
             )
         ).finalize()
-        );
+    );
 }

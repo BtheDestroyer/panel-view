@@ -7,6 +7,7 @@ body {
 }
 h1 {
     padding: 0.5em;
+    margin-top: 0;
     margin-bottom: 0.75em;
     color: #888;
     background-color: #181820;
@@ -25,18 +26,9 @@ h1::after {
 .panels {
     margin: 0.5em 1em 0em 0.5em;
     padding-bottom: 3.5em;
+    gap: 1.5em;
 }
-.panel {
-    padding-bottom: 0.5em;
-    margin-bottom: 0.5em;
-    border: 4px solid #181820;
-    border-radius: 1em;
-    width: 100%;
-    color: #888;
-    background-color: #282830;
-    break-inside: avoid;
-}
-@media screen and (min-width:65em) {
+@media screen and (min-width:65em) and (max-width: 130em) {
     .panels {
         column-count: 2;
     }
@@ -46,12 +38,52 @@ h1::after {
         column-count: 3;
     }
 }
+.panel {
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    border: 4px solid #181820;
+    border-radius: 1em;
+    width: 100%;
+    color: #888;
+    background-color: #282830;
+    break-inside: avoid;
+    box-shadow: 0.5em 0.5em 0.5em #0008
+}
 .panel>* {
     margin-left: 1em;
     margin-right: 1em;
 }
+.panel * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.panel hr {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+    color: #181820CC;
+}
+.panel ol {
+    padding-left: 1em;
+}
+.panel ul {
+    padding-left: 0.5em;
+}
+.panel ul>ul {
+    padding-left: 1em;
+}
+.panel ul>li {
+    padding-left: 0.5em;
+}
+.panel>ol {
+    padding-left: 2em;
+}
+.panel>ul {
+    padding-left: 1.5em;
+}
 .panel>h2 {
-    margin: 0;
+    margin: 0 0 0.5em 0;
     padding: 0.5em;
     border-radius: 0.25em 0.25em 0 0;
     background-color: #181820;

@@ -1,0 +1,16 @@
+title: Minecraft Server Status Example
+priority: -100
+contents:
+  - minecraft-status:
+      host: garage.brycedixon.dev
+      port: 25565
+      display:
+      - text: "description.text: {description.text}"
+      - text: "players.max: {players.max}"
+      - text: "players.online: {players.online}"
+      - text: "players.list: {players.list}"
+      - text: "version.name: {version.name}"
+      - text: "version.protocol: {version.protocol}"
+      - text: "favicon: {favicon}"
+      - text: "host: {host}"
+      - text: "port: {port}"

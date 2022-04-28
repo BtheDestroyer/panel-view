@@ -11,12 +11,12 @@ module.exports = async function(req, res)
     messages.slice(START).reverse().forEach(
         msg => list.li(msg)
         );
-    res.write(PG().html(
+    res.end(PG().DOCTYPE()
+        .html(
         PG().body(
             PG().h1('panel-view log')
             .ul(list.finalize())
             )
         ).finalize()
-        );
-    res.end();
+    );
 }

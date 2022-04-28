@@ -3,15 +3,6 @@ module.exports = function() {
         content: [],
         finalize: function() { return this.content.join(""); },
         toString: function() { return this.finalize(``); },
-        append: function(element)
-        {
-            element = `${element}`;
-            if (element.length > 0)
-            {
-                this.content.push(element);
-            }
-            return this;
-        },
         addGenerator: function(htmlTag, defaultAttributeMap = {}, hasContent = true)
         {
             if (hasContent)
@@ -58,6 +49,54 @@ module.exports = function() {
             }
             return this;
         },
+        append: function(element)
+        {
+            if (typeof(element) != "string")
+            {
+                element = `${element}`;
+            }
+            if (element.length > 0)
+            {
+                this.content.push(element);
+            }
+            return this;
+        },
+        appendTag: function(tag, content = undefined, attributeMap = {})
+        {
+            if (Object.keys(attributeMap).length == 0)
+            {
+                if (content == undefined)
+                {
+                    this.append(`<${htmlTag} />`);
+                }
+                else
+                {
+                    this.append(`<${htmlTag}>${content}</${htmlTag}>`);
+                }
+            }
+            else
+            {
+                let attributeList = [];
+                for (const key in attributeMap)
+                {
+                    attributeList.push(`${key}="${attributeMap[key]}"`);
+                }
+                if (content == undefined)
+                {
+                    this.append(`<${htmlTag} ${attributeList.join(" ")} />`)
+                }
+                else
+                {
+                    this.append(`<${htmlTag} ${attributeList.join(" ")}>${content}</${htmlTag}>`)
+                }
+            }
+            return this;
+        },
+        DOCTYPE: function(doctype = "html")
+        {
+            this.append(`<!DOCTYPE ${doctype}>`);
+            return this;
+        }
     }
     .addGenerator("html")
     .addGenerator("head")

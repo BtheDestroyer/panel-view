@@ -5,7 +5,7 @@ contents:
       host: garage.brycedixon.dev
       port: 25565
       display:
-      - text: "IP: {host}"
+      - text: "IP: {host}:{port}"
       - text: "Version: {version.name}"
       - text: "{players.online} / {players.max} Players Online"
       - text: "{players.list}"

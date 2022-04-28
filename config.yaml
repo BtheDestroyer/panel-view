@@ -1,10 +1,13 @@
 http:
   port: 8081
 
+page:
+  title: Panel View
+
 log:
   file: "./last.log"
   levels:
     errors: true
     warnings: true
     info: true
-    debug: true
+    debug: false

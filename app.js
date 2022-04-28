@@ -12,35 +12,6 @@ function fail(reason)
     exit(1);
 }
 
-function doAction(action)
-{
-    var performedAction = false;
-    if (action.hasOwnProperty("command"))
-    {
-        performedAction = true;
-        exec(action["command"],
-            {cwd: action.hasOwnProperty("cwd") ? action["cwd"] : "."},
-            (error, stdout, stderr) =>
-            {
-                LOG.info(`Command outputs from [${action["command"]}]`);
-                if (stdout)
-                {
-                    LOG.info(`stdout: ${stdout}`);
-                }
-                if (stderr)
-                {
-                    LOG.error(`stderr: ${stderr}`);
-                }
-                if (error)
-                {
-                    LOG.error(`error: ${error}`);
-                }
-            });
-    }
-    
-    return performedAction;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Main program start //
 ////////////////////////
@@ -67,7 +38,7 @@ HTTP.createServer(async (req, res) => {
         let url = new URL(req.url, `http://${req.headers.host}/`);
         if (req.method === "GET")
         {
-            LOG.debug(`HTTP GET request recieved: ${req.url}`)
+            LOG.info(`HTTP GET request recieved: ${req.url}`)
             if (url.pathname === "/")
             {
                 LOG.debug("Serving index...");
