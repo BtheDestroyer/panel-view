@@ -7,7 +7,7 @@ const CONTENT = require("./panel-content.js");
 
 async function drawPanel(panel)
 {
-    return PG().div(PG().h2(panel.title).append(await CONTENT.drawContents(panel.contents)), { class: "panel", panel: panel.panel });
+    return PG().div(PG().h2(panel.title).append(await CONTENT.drawContents(panel.contents)), { class: "panel", id: panel.panel });
 }
 
 module.exports = {};
