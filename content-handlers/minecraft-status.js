@@ -271,6 +271,10 @@ module.exports = async function(entry)
     {
         status.favicon = PG().img().finalize();
     }
+    if (status.players == undefined)
+    {
+        status.players = {};
+    }
     if (status.players.sample == undefined)
     {
         status.players.sample = [];
