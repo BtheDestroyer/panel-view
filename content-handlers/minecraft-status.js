@@ -253,6 +253,16 @@ module.exports = async function(entry)
         entry["minecraft-status"].host,
         entry["minecraft-status"].port
     );
+    if (status == undefined)
+    {
+        section.p(PG().b(PG().i(`Error: Could not determine server status`)));
+        return section;
+    }
+    if (status.error)
+    {
+        section.p(PG().b(PG().i(`Error: ${status.error}`)));
+        return section;
+    }
     if (status.favicon != undefined)
     {
         status.favicon = PG().img({ src: status.favicon }).finalize();
@@ -271,10 +281,6 @@ module.exports = async function(entry)
         playerList.li(sample.name);
     }
     status.players.list = PG().ul(playerList).finalize();
-    if (status.error)
-    {
-        section.p(PG().b(PG().i(`Error: ${status.error}`)));
-    }
     for (var entry of entry["minecraft-status"].display)
     {
         var line = entry.text;
