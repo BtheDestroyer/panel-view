@@ -1,6 +1,21 @@
-module.exports = function() {
+module.exports = function(defaultContents = undefined) {
     let page = {
-        content: [],
+        content: (() =>
+        {
+            if (typeof(defaultContents) == "string")
+            {
+                return [defaultContents];
+            }
+            if (defaultContents instanceof Array)
+            {
+                for (const i in defaultContents)
+                {
+                    defaultContents[i] = `${defaultContents}`;
+                }
+                return defaultContents;
+            }
+            return []
+        })(),
         finalize: function() { return this.content.join(""); },
         toString: function() { return this.finalize(``); },
         addGenerator: function(htmlTag, defaultAttributeMap = {}, hasContent = true)
