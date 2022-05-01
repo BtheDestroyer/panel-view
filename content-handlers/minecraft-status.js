@@ -144,8 +144,7 @@ function createHandshakePacket(host, port)
         ...encodeNumberAsVarInt(758),
         host.length,
         ...Buffer.from(host),
-        (port >> 8) & 0xFF,
-        port & 0xFF,
+        ...toBuffer(port, "short"),
         0x01
     ]);
 }
