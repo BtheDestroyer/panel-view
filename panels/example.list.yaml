@@ -2,18 +2,18 @@ title: Bullet Example
 priority: -100
 contents:
   - bullet:
-    - text: Here's some text
-    - text: Organized in a bullet-point list
+    - text: "Here's some text"
+    - text: "Organized in a bullet-point list"
     - bullet:
-      - text: Nested bullets are also available
-      - text: For further organization
+      - text: "Nested bullets are also available"
+      - text: "For further organization"
   - list:
-    - text: Here's some text
-    - text: Organized in a numeric list
+    - text: "Here's some text"
+    - text: "Organized in a numeric list"
     - list:
-      - text: Nested numeric lists are also available
-      - text: For further organization
+      - text: "Nested numeric lists are also available"
+      - text: "For further organization"
   - list:
-    - text: Bullet and numeric lists
+    - text: "Bullet and numeric lists"
     - bullet:
-      - text: Can also be combined
+      - text: "Can also be combined"

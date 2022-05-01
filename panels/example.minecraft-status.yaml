@@ -1,8 +1,8 @@
-title: Minecraft Server Status Example
+title: "Minecraft Server Status Example"
 priority: -100
 contents:
   - minecraft-status:
-      host: minecraft.domain.tld
+      host: "minecraft.domain.tld"
       port: 25565
       display:
       - text: "description.text: {description.text}"

@@ -2,7 +2,7 @@ http:
   port: 8081
 
 page:
-  title: Panel View
+  title: "Panel View"
 
 log:
   file: "./last.log"
