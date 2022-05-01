@@ -154,21 +154,6 @@ function createStatusRequestPacket()
     return addPacketHeaderToData(encodeNumberAsVarInt(0x00));
 }
 
-function handlePacket(packet)
-{
-    const packetID = decodeVarInt(packet);
-    packet = packet.slice(encodeNumberAsVarInt(packetID).length);
-    console.log(`Got Packet. ID: [${packetID}]`);
-    if (packetID == 0x00)
-    {
-        // Server Status
-        const length = decodeVarInt(packet);
-        packet = packet.slice(encodeNumberAsVarInt(length).length);
-        const status = JSON.parse(packet.toString());
-        console.log(status);
-    }
-}
-
 async function requestServerStatus(host, port)
 {
     var currentPacket = null;
