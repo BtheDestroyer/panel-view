@@ -36,7 +36,15 @@ module.exports = async function (req, res)
                     { class: "panels" }
                 )
                 .footer(
-                    PG().p(`${PG().a("panel-view", { href: "https://github.com/bthedestroyer/panel-view" })} Copyright Bryce Dixon, &copy; 2022`)
+                    (() =>
+                    {
+                        if (CFG.page.footer)
+                        {
+                            return PG().p(CFG.page.footer);
+                        }
+                        return PG();
+                    })()
+                    .p(`${PG().a("panel-view", { href: "https://github.com/bthedestroyer/panel-view" })} Copyright Bryce Dixon, &copy; 2022`)
                 )
                 .script("", { src: "/panel_manager.js" })
             )

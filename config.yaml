@@ -3,6 +3,7 @@ http:
 
 page:
   title: "Panel View"
+  footer: ""
 
 log:
   file: "./last.log"
