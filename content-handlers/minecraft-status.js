@@ -1,7 +1,13 @@
 const Net = require("net");
+const DNS = require("dns");
 const LOG = require("../log.js");
 const PG = require("../pagegen.js");
 const CONTENT = require("../panel-content.js");
+
+async function sleep(ms)
+{
+    await new Promise(r => setTimeout(r, ms));
+}
 
 function toBuffer(data, typeHint)
 {
@@ -154,8 +160,36 @@ function createStatusRequestPacket()
     return addPacketHeaderToData(encodeNumberAsVarInt(0x00));
 }
 
+async function checkForDNSSrvRecord(host)
+{
+    const srvLocation = `_minecraft._tcp.${host}`;
+    var result = null;
+    DNS.resolveSrv(srvLocation, (error, addrs) =>
+    {
+        if (error)
+        {
+            result = { success: false, error };
+            return;
+        }
+        addrs.sort((a, b) => (a.priority - b.priority) * 1000 + (a.weight - b.weight));
+        result = { success: true, addrs };
+    })
+    await (async () => { while (result == null) { await sleep(100); }})();
+    return result;
+}
+
 async function requestServerStatus(host, port)
 {
+    if (host == undefined)
+    {
+        LOG.error("requestServerStatus(): No host provided");
+        return { error: "No host provided." };
+    }
+    if (port == undefined)
+    {
+        LOG.error("requestServerStatus(): Failed to connect");
+        return { error: "Failed to connect." };
+    }
     var currentPacket = null;
     var remainingPacketLength = 0;
     var status = undefined;
@@ -164,64 +198,61 @@ async function requestServerStatus(host, port)
     var socket = await client.connect({port, host});
     if (!socket)
     {
-        status = { error: "Failed to connect." };
-        LOG.error("Failed to connect");
+        LOG.error("requestServerStatus(): Failed to connect");
+        return { error: "Failed to connect." };
     }
-    else
+    LOG.debug("Connected");
+    client.on("timeout", () =>
     {
-        LOG.debug("Connected");
-        client.on("timeout", () =>
+        LOG.error("requestServerStatus(): Connection timed out");
+        status = { error: "Connection timed out." };
+    });
+    client.on("error", (error) =>
+    {
+        LOG.error(error);
+        status = { error };
+    });
+    client.on("data", (chunk) =>
+    {
+        if (remainingPacketLength == 0)
         {
-            LOG.error("Connection timed out");
-            status = { error: "Connection timed out." };
-        });
-        client.on("error", (error) =>
+            remainingPacketLength = decodeVarInt(chunk);
+            chunk = chunk.slice(encodeNumberAsVarInt(remainingPacketLength).length);
+            currentPacket = Buffer.from([]);
+        }
+        currentPacket = Buffer.from([...currentPacket, ...chunk]);
+        remainingPacketLength -= chunk.length;
+        LOG.debug(`requestServerStatus(): Got ${chunk.length} bytes. Waiting for ${remainingPacketLength} more`)
+        if (remainingPacketLength <= 0)
         {
-            LOG.error(error);
-            status = { error };
-        });
-        client.on("data", (chunk) =>
-        {
-            if (remainingPacketLength == 0)
+            const packetID = decodeVarInt(currentPacket);
+            currentPacket = currentPacket.slice(encodeNumberAsVarInt(packetID).length);
+            LOG.debug(`requestServerStatus(): Packet ID: [${packetID}]`);
+            if (packetID == 0x00)
             {
-                remainingPacketLength = decodeVarInt(chunk);
-                chunk = chunk.slice(encodeNumberAsVarInt(remainingPacketLength).length);
-                currentPacket = Buffer.from([]);
+                // Server Status
+                const length = decodeVarInt(currentPacket);
+                currentPacket = currentPacket.slice(encodeNumberAsVarInt(length).length);
+                status = JSON.parse(currentPacket.toString());
+                LOG.debug("requestServerStatus(): Set status!");
             }
-            currentPacket = Buffer.from([...currentPacket, ...chunk]);
-            remainingPacketLength -= chunk.length;
-            LOG.debug(`Got ${chunk.length} bytes. Waiting for ${remainingPacketLength} more`)
-            if (remainingPacketLength <= 0)
+            else
             {
-                const packetID = decodeVarInt(currentPacket);
-                currentPacket = currentPacket.slice(encodeNumberAsVarInt(packetID).length);
-                LOG.debug(`Packet ID: [${packetID}]`);
-                if (packetID == 0x00)
-                {
-                    // Server Status
-                    const length = decodeVarInt(currentPacket);
-                    currentPacket = currentPacket.slice(encodeNumberAsVarInt(length).length);
-                    status = JSON.parse(currentPacket.toString());
-                    LOG.debug("Set status!");
-                }
-                else
-                {
-                    LOG.debug(`Unexpected packet ID: ${currentPacket.toString()}`);
-                }
+                LOG.debug(`requestServerStatus(): Unexpected packet ID: ${currentPacket.toString()}`);
             }
-        });
-        LOG.debug("Sending handshake...");
-        const handshake = createHandshakePacket(host, port);
-        client.write(handshake);
-        LOG.debug("Sending status request...");
-        const statusRequest = createStatusRequestPacket();
-        client.write(statusRequest);
-        await (async() => { while (status === undefined) { await new Promise(r => setTimeout(r, 100)); } })();
-        LOG.debug("All done! Ending connection...");
-    }
+        }
+    });
+    LOG.debug("requestServerStatus(): Sending handshake...");
+    const handshake = createHandshakePacket(host, port);
+    client.write(handshake);
+    LOG.debug("requestServerStatus(): Sending status request...");
+    const statusRequest = createStatusRequestPacket();
+    client.write(statusRequest);
+    await (async() => { while (status === undefined) { await sleep(100); } })();
+    LOG.debug("requestServerStatus(): All done! Ending connection...");
     await client.end();
     client.destroy();
-    LOG.debug("Returning status...");
+    LOG.debug("requestServerStatus(): Returning status...");
     status = Object.assign(status, { host, port });
     return status;
 }
@@ -233,10 +264,20 @@ module.exports = async function(entry)
     {
         return section;
     }
+    var host = entry["minecraft-status"].host;
+    var port = entry["minecraft-status"].host;
+    var dnsCheck = await checkForDNSSrvRecord(host);
+    if (dnsCheck.success && dnsCheck.addrs instanceof Array && dnsCheck.addrs.length != 0)
+    {
+        host = dnsCheck.addrs[0].name;
+        port = dnsCheck.addrs[0].port;
+    }
     var status = await requestServerStatus(
-        entry["minecraft-status"].host,
-        entry["minecraft-status"].port
+        host,
+        port
     );
+    status.host = entry["minecraft-status"].host;
+    status.foundSrvRecord = dnsCheck.success;
     if (status == undefined)
     {
         section.p(PG().b(PG().i(`Error: Could not determine server status`)));
