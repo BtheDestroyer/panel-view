@@ -183,29 +183,34 @@ async function requestServerStatus(host, port)
     if (host == undefined)
     {
         LOG.error("requestServerStatus(): No host provided");
-        return { error: "No host provided." };
+        return { error: "No host provided" };
     }
     if (port == undefined)
     {
-        LOG.error("requestServerStatus(): Failed to connect");
-        return { error: "Failed to connect." };
+        LOG.error("requestServerStatus(): No port provided");
+        return { error: "No port provided" };
+    }
+    if (typeof(port) != "number")
+    {
+        LOG.error(`requestServerStatus(): Provided port [${port}] is not a Number`);
+        return { error: `Provided port [${port}] is not a Number` };
     }
     var currentPacket = null;
     var remainingPacketLength = 0;
     var status = undefined;
     var client = new Net.Socket();
     client.setTimeout(1000);
-    var socket = await client.connect({port, host});
+    var socket = await client.connect({host, port});
     if (!socket)
     {
         LOG.error("requestServerStatus(): Failed to connect");
-        return { error: "Failed to connect." };
+        return { error: "Failed to connect" };
     }
     LOG.debug("Connected");
     client.on("timeout", () =>
     {
         LOG.error("requestServerStatus(): Connection timed out");
-        status = { error: "Connection timed out." };
+        status = { error: "Connection timed out" };
     });
     client.on("error", (error) =>
     {
@@ -265,7 +270,7 @@ module.exports = async function(entry)
         return section;
     }
     var host = entry["minecraft-status"].host;
-    var port = entry["minecraft-status"].host;
+    var port = entry["minecraft-status"].port;
     var dnsCheck = await checkForDNSSrvRecord(host);
     if (dnsCheck.success && dnsCheck.addrs instanceof Array && dnsCheck.addrs.length != 0)
     {
