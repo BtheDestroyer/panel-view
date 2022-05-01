@@ -44,7 +44,7 @@ module.exports = async function (req, res)
                         }
                         return PG();
                     })()
-                    .p(`${PG().a("panel-view", { href: "https://github.com/bthedestroyer/panel-view" })} Copyright Bryce Dixon, &copy; 2022`)
+                    .p(`Made using ${PG().a("panel-view", { href: "https://github.com/bthedestroyer/panel-view" })} Copyright Bryce Dixon, &copy; 2022`)
                 )
                 .script("", { src: "/panel_manager.js" })
             )
