@@ -5,6 +5,9 @@ page:
   title: "Panel View"
   footer: ""
 
+generate-static-pages:
+  export-dir: "export"
+
 log:
   file: "./last.log"
   levels:
