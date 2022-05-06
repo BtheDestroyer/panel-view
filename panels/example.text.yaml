@@ -1,15 +1,15 @@
-title: Text Example
+title: "Text Example"
 priority: -100
 contents:
-  - text: Italic
+  - text: "Italic"
     italic: true
-  - text: Bold
+  - text: "Bold"
     bold: true
-  - text: Underline
+  - text: "Underline"
     underline: true
-  - text: Strikethrough
+  - text: "Strikethrough"
     strikethrough: true
-  - text: Link
-    link: https://github.com/bthedestroyer/panel-view
+  - text: "Link"
+    link: "https://github.com/bthedestroyer/panel-view"
   - horizontalrule: true
-    text: Separate section via horizontal rule
+    text: "Separate section via horizontal rule"

@@ -1,22 +1,22 @@
-title: Hello Panels
+title: "Hello Panels"
 contents:
-  - text: Welcome to panel-view!
+  - text: "Welcome to panel-view!"
     italic: true
   - bullet:
-    - text: View the source code
-      link: https://github.com/bthedestroyer/panel-view
-    - text: Check out the configuration documentation (TBA)
+    - text: "View the source code"
+      link: "https://github.com/bthedestroyer/panel-view"
+    - text: "Check out the configuration documentation (TBA)"
     - bullet:
-      - text: Nested bullets!
-      - text: Because we can
+      - text: "Nested bullets!"
+      - text: "Because we can"
         italic: true
   - text: "Text examples:"
-  - text: Italic
+  - text: "Italic"
     italic: true
-  - text: Bold
+  - text: "Bold"
     bold: true
-  - text: Underline
+  - text: "Underline"
     underline: true
-  - text: Strikethrough
+  - text: "Strikethrough"
     strikethrough: true
-  - image: https://via.placeholder.com/150S
+  - image: "https://via.placeholder.com/150S"

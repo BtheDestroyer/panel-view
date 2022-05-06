@@ -161,7 +161,7 @@ module.exports = function(defaultContents = undefined) {
     .addGenerator("form", { action: undefined, method: "post" }, false)
     .addGenerator("input", { type: "text", name: undefined })
     .addGenerator("textarea", { rows: 5, cols: 40, name: undefined })
-    .addGenerator("button", { type: "button", value: undefined }, false)
+    .addGenerator("button", { type: "button", value: undefined })
     
     .addGenerator("colgroup", { span: undefined })
     .addGenerator("col", { width: 100});
