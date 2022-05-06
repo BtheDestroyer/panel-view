@@ -44,7 +44,7 @@ HTTP.createServer(async (req, res) => {
                 LOG.debug("Serving index...");
                 const indexPath = "./pages/index.js";
                 delete require.cache[require.resolve(indexPath)];
-                await require(indexPath)(req, res);
+                await require(indexPath).serve(req, res);
                 return;
             }
             if (url.pathname.endsWith("/"))
@@ -70,7 +70,7 @@ HTTP.createServer(async (req, res) => {
                 {
                     LOG.debug("Serving dynamic page...");
                     delete require.cache[require.resolve(absPath)];
-                    await require(absPath)(req, res);
+                    await require(absPath).serve(req, res);
                     return;
                 }
             }

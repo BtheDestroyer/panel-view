@@ -52,6 +52,6 @@ module.exports = {
             return;
         }
         res.writeHead(200, {'Content-Type':'text/html'});
-        res.end(await generate(req));
+        res.end(await this.generate(req));
     }
 }

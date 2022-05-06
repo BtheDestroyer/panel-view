@@ -22,6 +22,6 @@ module.exports =  {
         messages.slice(START).reverse().forEach(
             msg => list.li(msg)
             );
-        res.end(generate(req));
+        res.end(this.generate(req));
     }
 }
