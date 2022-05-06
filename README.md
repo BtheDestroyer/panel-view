@@ -2,6 +2,8 @@
 
 Configurable webserver intended for providing updates and viewing the status of services.
 
+![Example webpage](https://i.imgur.com/MWTMMDJ.png)
+
 ## Why?
 
 I wanted an easier way of creating simple yet dynamic and reactive web pages than learning an entire web framework from scratch, so I made panel-view.
