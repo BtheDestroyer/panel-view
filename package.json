@@ -2,5 +2,31 @@
   "dependencies": {
     "mime": "^3.0.0",
     "yaml": "^2.0.1"
-  }
+  },
+  "name": "panel-view",
+  "description": "Configurable webserver intended for viewing the status of services.",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bthedestroyer/panel-view.git"
+  },
+  "keywords": [
+    "website",
+    "html",
+    "generator",
+    "simple",
+    "easy"
+  ],
+  "author": "Bryce Dixon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bthedestroyer/panel-view/issues"
+  },
+  "homepage": "https://github.com/bthedestroyer/panel-view#readme"
 }
