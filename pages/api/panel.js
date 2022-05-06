@@ -65,6 +65,6 @@ module.exports = {
     serve: async function (req, res)
     {
         res.writeHead(200, {'Content-Type':'application/hal+json'});
-        res.end(generate(req));
+        res.end(this.generate(req));
     }
 }
