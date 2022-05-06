@@ -1,8 +1,16 @@
 const PG = require("../pagegen.js");
 
-module.exports =  {
+module.exports = {
     generate: async function(req)
     {
+        const LOG_LENGTH = 20;
+        const START = messages.length > 20
+            ? messages.length - LOG_LENGTH
+            : 0;
+        var list = PG();
+        messages.slice(START).reverse().forEach(
+            msg => list.li(msg)
+            );
         return PG().DOCTYPE()
             .html(
             PG().body(
@@ -14,14 +22,6 @@ module.exports =  {
     serve: async function(req, res)
     {
         res.writeHead(200, {'Content-Type':'text/html'});
-        const LOG_LENGTH = 20;
-        const START = messages.length > 20
-            ? messages.length - LOG_LENGTH
-            : 0;
-        var list = PG();
-        messages.slice(START).reverse().forEach(
-            msg => list.li(msg)
-            );
         res.end(this.generate(req));
     }
 }
